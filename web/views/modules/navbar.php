@@ -1,193 +1,240 @@
-  <!-- Navbar -->
- 
-    <div class="container">
+<?php 
 
-        <div class="row">
+/*=============================================
+Categorías
+=============================================*/
 
-        <div class="col-12 col-lg-2 mt-1">
+$select = "id_category,name_category,url_category,icon_category";
+$url = "categories?select=".$select;
+$method = "GET";
+$fields = array();
 
-            <div class="d-flex justify-content-center">
-                <a href="<?php echo $path?>views/assets/index3.html" class="navbar-brand">
-                    <img src="<?php echo $path?>views/assets/img/template/logo.png" class="brand-image img-fluid py-3 px-5 px-lg-0
-                    pe-lg-3" ">
+$dataCategories = CurlController::request($url,$method,$fields);
 
-                </a>
-            </div>
+if($dataCategories->status == 200){
 
-        </div>
+  $dataCategories = $dataCategories->results;
 
-        <div class="col-12 col-lg-7 col-xl-8 mt-1 px-lg-0">
+}else{
 
-             <a class="nav-link float-start" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+   $dataCategories = array();
+   
 
-        <div class="dropdown px-1 float-start" style="background: #47BAC1;color:white">
+}
+
+/*=============================================
+Carrito de compras
+=============================================*/
+
+if(isset($_SESSION["user"])){
+
+  $select = "id_cart,url_product,type_variant,media_variant,name_product,description_variant,quantity_cart,offer_variant,price_variant";
+  $url = "relations?rel=carts,variants,products&type=cart,variant,product&linkTo=id_user_cart&equalTo=".$_SESSION["user"]->id_user."&select=".$select;
+  $method = "GET";
+  $fields = array();
+
+  $carts = CurlController::request($url,$method,$fields);
+
+  if($carts->status == 200){
+
+    $carts = $carts->results;
+
+  }else{
+
+    $carts = array();    
+
+  }
+
+}else{
+
+  $carts = array();  
+
+}
+
+?>
 
 
-            <a id="dropdownSubMenu1" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Categorias</a>
 
-            <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
+<!-- Navbar -->
 
-            
-              <!-- Level two dropdown-->
-              <li class="dropdown-submenu dropdown-hover">
-                <a id="dropdownSubMenu2" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-item dropdown-toggle">Hover for action</a>
-                <ul aria-labelledby="dropdownSubMenu2" class="dropdown-menu border-0 shadow">
-                  <li>
-                    <a tabindex="-1" href="#" class="dropdown-item">level 2</a>
-                  </li>
+<div class="container py-2 py-lg-4">
 
-                  <!-- Level three dropdown-->
-                  <li class="dropdown-submenu">
-                    <a id="dropdownSubMenu3" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-item dropdown-toggle">level 2</a>
-                    <ul aria-labelledby="dropdownSubMenu3" class="dropdown-menu border-0 shadow">
-                      <li><a href="#" class="dropdown-item">3rd level</a></li>
-                      <li><a href="#" class="dropdown-item">3rd level</a></li>
-                    </ul>
-                  </li>
-                  <!-- End Level three -->
-
-                  <li><a href="#" class="dropdown-item">level 2</a></li>
-                  <li><a href="#" class="dropdown-item">level 2</a></li>
-                </ul>
-              </li>
-              <!-- End Level two -->
-            </ul>
-        </div>
-        </div>
-
-        <div class="col-12 col-lg-3 col-xl-2 mt-1 px-3 px-lg-0">
-
-        </div>
-
+  <div class="row">
+    
+    <div class="col-12 col-lg-2 mt-1">
       
-      <button class="navbar-toggler order-1" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+      <div class="d-flex justify-content-center">
+        
+        <a href="<?php echo $path ?>" class="navbar-brand">
+          <img src="<?php echo $path ?>views/assets/img/template/<?php echo $template->id_template ?>/<?php echo $template->logo_template ?>" class="brand-image img-fluid py-3 px-5 p-lg-0 pe-lg-3">
+        </a>
 
-      <div class="collapse navbar-collapse order-3" id="navbarCollapse">
-        <!-- Left navbar links -->
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
-          </li>
-          <li class="nav-item">
-            <a href="index3.html" class="nav-link">Home</a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link">Contact</a>
-          </li>
-
-        </ul>
-
-        <!-- SEARCH FORM -->
-        <form class="form-inline ml-0 ml-md-3">
-          <div class="input-group input-group-sm">
-            <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
-            <div class="input-group-append">
-              <button class="btn btn-navbar" type="submit">
-                <i class="fas fa-search"></i>
-              </button>
-            </div>
-          </div>
-        </form>
       </div>
 
-      <!-- Right navbar links -->
-      <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
-        <!-- Messages Dropdown Menu -->
-        <li class="nav-item dropdown">
-          <a class="nav-link" data-toggle="dropdown" href="#">
-            <i class="fas fa-comments"></i>
-            <span class="badge badge-danger navbar-badge">3</span>
-          </a>
-          <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-            <a href="#" class="dropdown-item">
-              <!-- Message Start -->
-              <div class="media">
-                <img src="<?php echo $path?>views/assets/img/adminlte/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
-                <div class="media-body">
-                  <h3 class="dropdown-item-title">
-                    Brad Diesel
-                    <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
-                  </h3>
-                  <p class="text-sm">Call me whenever you can...</p>
-                  <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                </div>
-              </div>
-              <!-- Message End -->
-            </a>
-            <div class="dropdown-divider"></div>
-            <a href="#" class="dropdown-item">
-              <!-- Message Start -->
-              <div class="media">
-                <img src="<?php echo $path?>views/assets/img/adminlte/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-                <div class="media-body">
-                  <h3 class="dropdown-item-title">
-                    John Pierce
-                    <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
-                  </h3>
-                  <p class="text-sm">I got your message bro</p>
-                  <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                </div>
-              </div>
-              <!-- Message End -->
-            </a>
-            <div class="dropdown-divider"></div>
-            <a href="#" class="dropdown-item">
-              <!-- Message Start -->
-              <div class="media">
-                <img src="<?php echo $path?>views/assets/img/adminlte/user3-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
-                <div class="media-body">
-                  <h3 class="dropdown-item-title">
-                    Nora Silvester
-                    <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
-                  </h3>
-                  <p class="text-sm">The subject goes here</p>
-                  <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                </div>
-              </div>
-              <!-- Message End -->
-            </a>
-            <div class="dropdown-divider"></div>
-            <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
-          </div>
-        </li>
-        <!-- Notifications Dropdown Menu -->
-        <li class="nav-item dropdown">
-          <a class="nav-link" data-toggle="dropdown" href="#">
-            <i class="far fa-bell"></i>
-            <span class="badge badge-warning navbar-badge">15</span>
-          </a>
-          <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-            <span class="dropdown-header">15 Notifications</span>
-            <div class="dropdown-divider"></div>
-            <a href="#" class="dropdown-item">
-              <i class="fas fa-envelope mr-2"></i> 4 new messages
-              <span class="float-right text-muted text-sm">3 mins</span>
-            </a>
-            <div class="dropdown-divider"></div>
-            <a href="#" class="dropdown-item">
-              <i class="fas fa-users mr-2"></i> 8 friend requests
-              <span class="float-right text-muted text-sm">12 hours</span>
-            </a>
-            <div class="dropdown-divider"></div>
-            <a href="#" class="dropdown-item">
-              <i class="fas fa-file mr-2"></i> 3 new reports
-              <span class="float-right text-muted text-sm">2 days</span>
-            </a>
-            <div class="dropdown-divider"></div>
-            <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
-          </div>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
-            <i class="fas fa-th-large"></i>
-          </a>
-        </li>
-      </ul>
     </div>
-    
+
+    <div class="col-12 col-lg-7 col-xl-8 mt-1 px-3 px-lg-0">
+      
+      <?php if (isset($_SESSION["admin"])): ?>
+
+        <a class="nav-link float-start" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
         
+      <?php endif ?>
+     
+      <div class="dropdown px-1 float-start templateColor">
+
+        <a id="dropdownSubMenu1" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle text-uppercase">
+          <span class="d-lg-block d-none">Categorias<i class="ps-lg-2 fas fa-th-list"></i></span>
+          <span class="d-lg-none d-block"><i class="fas fa-th-list"></i></span>
+
+        </a>
+
+        <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
+
+          <?php foreach ($dataCategories as $key => $value): ?>
+
+            <?php 
+
+              $select = "name_subcategory,url_subcategory";
+              $url = "subcategories?linkTo=id_category_subcategory&equalTo=".$value->id_category."&select=".$select;
+              $method = "GET";
+              $fields = array();
+
+              $dataSubcategories = CurlController::request($url,$method,$fields);
+
+              if($dataSubcategories->status == 200){
+
+                $dataSubcategories = $dataSubcategories->results;
+
+              }else{
+
+                $dataSubcategories = array();
+                
+              }
+
+           ?>
+
+            <li class="dropdown-submenu dropdown-hover">
+
+              <a id="dropdownSubMenu<?php echo $key ?>" href="/<?php echo $value->url_category ?>" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-item dropdown-toggle text-uppercase" onclick="redirect('/<?php echo $value->url_category ?>')"  >
+
+                <i class="<?php echo $value->icon_category ?> pe-2 fa-xs"></i>  <?php echo $value->name_category ?>
+
+              </a>
+
+              <ul class="border-0 shadow py-3 ps-3 d-block d-lg-none">
+
+                <?php foreach ($dataSubcategories as $index => $item): ?>
+
+                  <li>
+                    <a tabindex="-1" href="/<?php echo $item->url_subcategory ?>" class="dropdown-item"><?php echo $item->name_subcategory ?></a>
+                  </li>
+                    
+                <?php endforeach ?>
+ 
+              </ul>
+
+              <ul aria-labelledby="dropdownSubMenu<?php echo $key ?>" class="dropdown-menu border-0 shadow menuSubcategory">
+
+                <?php foreach ($dataSubcategories as $index => $item): ?>
+
+                  <li>
+                    <a tabindex="-1" href="/<?php echo $item->url_subcategory ?>" class="dropdown-item"><?php echo $item->name_subcategory ?></a>
+                  </li>
+                    
+                <?php endforeach ?>
+              
+              </ul>
+
+            </li>
+            
+          <?php endforeach ?>
+
+        </ul>
+      </div>
+
+      <form class="form-inline">
+        <div class="input-group input-group w-100 me-0 me-lg-4">
+          <input class="form-control rounded-0 p-3 pe-5 inputSearch" type="search" placeholder="Buscar..." style="height:40px">
+          <div class="input-group-append px-2 templateColor">
+            <button class="btn btn-navbar text-white btnSearch" type="button">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+        </div>
+      </form>
+
+    </div>
+
+    <div class="col-12 col-lg-3 col-xl-2 mt-1 px-3 px-lg-0">
+      
+      <div class="my-2 my-lg-0 d-flex justify-content-center">
+        
+        <a href="/carrito">
+          
+          <button class="bt btn-default float-start rounded-0 border-0 py-2 px-3 templateColor">
+            
+            <i class="fa fa-shopping-cart"></i>
+
+          </button>
+
+        </a>
+
+        <div class="small border float-start ps-2 pe-5 w-100">
+
+
+          <?php 
+
+          $shoppingBasket = 0;
+          $totalShop = 0;
+
+          if(!empty($carts)){
+
+            foreach ($carts as $key => $value) {
+
+              $shoppingBasket+=$value->quantity_cart;
+
+              if($value->offer_variant > 0){
+
+                $totalShop += $value->quantity_cart*$value->offer_variant;
+
+              }else{
+
+                $totalShop += $value->quantity_cart*$value->price_variant;
+
+              }
+
+            }
+          
+          }
+
+          ?>
+          
+          TU CESTA <span id="shoppingBasket"><?php echo $shoppingBasket ?></span><br> USD $<span id="totalShop"><?php echo number_format($totalShop,2) ?></span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
 </div>
+
+<script>
+  
+  function redirect(value){
+
+    window.location = value;
+  }
+
+  if(window.matchMedia("(max-width:768px)").matches){
+
+    $(".menuSubcategory").remove();
+
+  }
+
+</script>
 
   <!-- /.navbar -->
